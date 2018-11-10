@@ -16,6 +16,8 @@ fi
 mkfifo "$server_pipe"
 trap 'rm -f "$server_pipe"; exit $?' INT TERM EXIT
 
+# <>"$server_pipe" ensures that the pipe is kept open, as read has the pipe
+#  open for writing, despite not actually outputting anything into it.
 while read -r input <>"$server_pipe"; do
   case "$input" in
     create_database*)
