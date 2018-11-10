@@ -25,12 +25,13 @@ wait_time=$(bc -l <<< '1.0 / 2^7')
 while [ "$(printf "%.0f" "$wait_time")" -lt $(( 2 ** 3 )) ]; do
   if ( set -o noclobber; echo "locked" > "$lock_name") 2> /dev/null; then
     trap 'rm -f "$lock_name"; exit $?' INT TERM EXIT
-    echo "Locking succeeded"
+
     echo "$columns" > "${table_path}"
+
     rm -f "$lock_name"
+
     eval "${table_created}"
   else
-    echo "don't have lock, sleep $wait_time"
     sleep "$wait_time"
     wait_time=$(bc -l <<< "${wait_time} * 2")
   fi
