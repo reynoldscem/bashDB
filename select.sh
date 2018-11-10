@@ -1,9 +1,6 @@
 #!/bin/bash
 
 source functions.sh
-#!/bin/bash
-
-source functions.sh
 
 if [ "$#" -ne 3 ]; then
   eval "${param_problem}"
