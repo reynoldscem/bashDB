@@ -28,5 +28,7 @@ if [ ! "$schema_field_count" -eq "$tuple_field_count" ]; then
   eval "${schema_mismatch}"
 fi
 
-echo "${tuple}" >> "${table_path}"
-eval "${tuple_inserted}"
+attempt_work \
+  "${table_path}" \
+  "echo ${tuple} >> ${table_path}" \
+  "${tuple_inserted}"
