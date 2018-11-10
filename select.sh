@@ -35,15 +35,17 @@ done
 
 echo "start_result"
 
-while read -r line; do
-  for column in ${columns}; do
-    # Print this column from line, replace newline with ','
-    cut -d',' -f"${column}" <<< "$line" | tr $'\n' ','
-  done
-  # Delete last ','
-  echo -e '\b '
+read_results() {
+  while read -r line; do
+    for column in ${columns}; do
+      # Print this column from line, replace newline with ','
+      cut -d',' -f"${column}" <<< "$line" | tr $'\n' ','
+    done
+    # Delete last ','
+    echo -e '\b '
 
-# Read in table, from second line to ignore header.
-done < <(tail -n +2 "${table_path}")
-
-echo "end_result"
+  # Read in table, from second line to ignore header.
+  done < <(tail -n +2 "${table_path}")
+}
+# read_results
+attempt_work "$table_path" read_results "echo end_results; exit 0"
