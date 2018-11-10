@@ -10,7 +10,8 @@ database=$1
 
 if [ -d "$database" ]; then
   eval "${db_exists}"
-elif mkdir "$database"; then
+# If another process is trying to create the same database we don't really care.
+elif mkdir -p "$database"; then
   eval "${db_created}"
 else
   exit 1

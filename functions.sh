@@ -27,6 +27,8 @@ export tuple_inserted="exit_function 'tuple inserted' 0"
 
 export bad_request="exit_function 'bad request' 1"
 
+export timeout="exit_function 'timeout' 1"
+
 # Separate a string using ',', then count the fields.
 count_fields() {
   IFS=','
