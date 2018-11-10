@@ -29,12 +29,15 @@ export bad_request="exit_function 'bad request' 1"
 
 export timeout="exit_function 'timeout' 1"
 
+export server_pipe_exists="exit_function 'server pipe exists' 1"
+
 # Separate a string using ',', then count the fields.
 count_fields() {
   IFS=','
   read -ra line_array <<<"$1"
   echo "${#line_array[@]}"
 }
+
 attempt_work() {
   needed_file="$1"
   pre_lock="$2"

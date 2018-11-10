@@ -9,7 +9,14 @@ insert="${this_dir}/insert.sh"
 create_table="${this_dir}/create_table.sh"
 create_database="${this_dir}/create_database.sh"
 
-while read -r input; do
+server_pipe="${this_dir}/server.pipe"
+if [ -p "$server_pipe" ]; then
+    eval "${server_pipe_exists}"
+fi
+mkfifo "$server_pipe"
+trap 'rm -f "$server_pipe"; exit $?' INT TERM EXIT
+
+while read -r input <>"$server_pipe"; do
   case "$input" in
     create_database*)
       eval "$create_database $(cut -d' ' -f2- <<<"$input")" &
