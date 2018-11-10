@@ -1,6 +1,7 @@
 #!/bin/bash
 
-source functions.sh
+# shellcheck source=functions.sh
+source "$(dirname "$0")/functions.sh"
 
 if [ -z "$1" ]; then
   eval "${no_param}"

@@ -25,6 +25,9 @@ export db_created="exit_function 'database created' 0"
 export table_created="exit_function 'table created' 0"
 export tuple_inserted="exit_function 'tuple inserted' 0"
 
+export bad_request="exit_function 'bad request' 1"
+
+# Separate a string using ',', then count the fields.
 count_fields() {
   IFS=','
   read -ra line_array <<<"$1"
