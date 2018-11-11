@@ -30,6 +30,7 @@ export bad_request="exit_function 'bad request' 1"
 export timeout="exit_function 'timeout' 1"
 
 export server_pipe_exists="exit_function 'server pipe exists' 1"
+export server_pipe_doesnt_exist="exit_function 'server pipe doesnt exist' 1"
 
 # Separate a string using ',', then count the fields.
 count_fields() {
@@ -42,6 +43,8 @@ attempt_work() {
   needed_file="$1"
   pre_lock="$2"
   post_lock="$3"
+
+  timeout=true
 
   lock_name="${needed_file}.lock"
   wait_time=$(bc -l <<< '1.0 / 2^7')
@@ -63,14 +66,15 @@ attempt_work() {
       # Finish and quit
       eval "$post_lock"
 
-      # Post lock should exit.
-      exit 1
+      timeout=false
+      break
     else
       sleep "$wait_time"
-      # echo "$wait_time"
       # Exponential back off
       wait_time=$(bc -l <<< "${wait_time} * 2")
     fi
   done
-  eval "${timeout}"
+  if "$timeout"; then
+    eval "${timeout}"
+  fi
 }

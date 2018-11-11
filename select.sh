@@ -33,7 +33,7 @@ for entry in ${columns}; do
   [ "${entry}" -gt "${schema_field_count}" ] && eval "${column_doesnt_exist}"
 done
 
-echo "start_result"
+echo "start_results"
 
 read_results() {
   while read -r line; do

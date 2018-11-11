@@ -18,19 +18,25 @@ trap 'rm -f "$server_pipe"; exit $?' INT TERM EXIT
 
 # <>"$server_pipe" ensures that the pipe is kept open, as read has the pipe
 #  open for writing, despite not actually outputting anything into it.
-while read -r input <>"$server_pipe"; do
+while read -r id input <>"$server_pipe"; do
+  client_pipe="client.${id}.pipe"
+  [ -p "$client_pipe" ] || echo "No such pipe: ${client_pipe}"
   case "$input" in
     create_database*)
-      eval "$create_database $(cut -d' ' -f2- <<<"$input")" &
+      eval "$create_database $(cut -d' ' -f2- <<<"$input")" \
+        >> "$client_pipe" &
       ;;
     create_table*)
-      eval "$create_table $(cut -d' ' -f2- <<<"$input")" &
+      eval "$create_table $(cut -d' ' -f2- <<<"$input")" \
+        >> "$client_pipe" &
       ;;
     insert*)
-      eval "$insert $(cut -d' ' -f2- <<<"$input")" &
+      eval "$insert $(cut -d' ' -f2- <<<"$input")" \
+        >> "$client_pipe" &
       ;;
     select*)
-      eval "$select $(cut -d' ' -f2- <<<"$input")" &
+      eval "$select $(cut -d' ' -f2- <<<"$input")" \
+        >> "$client_pipe" &
       ;;
     *)
       eval "${bad_request}"
